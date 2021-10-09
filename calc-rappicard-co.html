@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <link href="./css/styles.css" rel="stylesheet">
+    <title>Rappicard - Calculadora</title>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+            <a class="navbar-brand" href="index.html">Menú</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Inicio</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="calc-rappicard-co.html">Colombia / Rappicard <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="#">Acerca de</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main role="main" class="container-fluid">
+        <div class="card">
+            <div class="card-header text-center bg-primary text-white font-weight">Rappicard - Simulador de cuotas tarjeta de crédito</div>
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <p class="lead">
+                            <strong>Nota:</strong> Esta calculadora fue realizada de manera <strong>independiente</strong> gracias al gran apoyo de la comunidad de Facebook, y pretende servir como <strong>simulador</strong>
+                            de cuotas para la RappiCard en Colombia.
+                            <br>
+                            Tal y como <strong>simulador</strong> que es, los valores aquí reflejados son <strong>solo estimación</strong>.
+                        </p>
+                        <br>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <label for="txtCompra">Fecha Rediferido-Compra:</label>
+                        <input onchange="calculadora_rappicard();" type="date" class="form-control" id="txtFecha" required>
+                    </div>
+                    <div class="col-md-4">
+
+                    </div>
+                    <div class="col-md-4">
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <label for="txtCompra">Valor compra:</label>
+                        <input onchange="calculadora_rappicard();" type="number" step="any" class="form-control" placeholder="0.00" id="txtCompra">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="txtTasaIntCte">Tasa Int Cte*:</label>
+                        <input onchange="calculadora_rappicard();" type="number" step="0.01" class="form-control" placeholder="0.00" id="txtTasaIntCte">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="txtCuotas">Cuotas (Plazo):</label>
+                        <input onchange="calculadora_rappicard();" type="number" class="form-control" placeholder="0" id="txtCuotas">
+                    </div>
+                </div>
+
+                <br>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <label for="cuotaPpromedio">Cuota promedio:</label>
+                        <p id="cuotaPromedio"></p>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="totalPagado">Total a pagar:</label>
+                        <p id="totalPagado"></p>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="interesesPagados">Intereses a pagar:</label>
+                        <p id="interesesPagados"></p>
+                    </div>
+                </div>
+
+                <table class="table table-striped table-hover table-responsive-md">
+                    <thead>
+                        <tr>
+                            <th scope="col"># Cuota</th>
+                            <th scope="col">Fecha de cobro</th>
+                            <th scope="col">Saldo inicial (Deuda)</th>
+                            <th scope="col">Capital (Cuota a Devolver)</th>
+                            <th scope="col">Interés</th>
+                            <th scope="col">Cuota</th>
+                            <th scope="col">Saldo Final (Deuda Total)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla_cuotas">
+
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th scope="col"># Cuota</th>
+                            <th scope="col">Fecha de cobro</th>
+                            <th scope="col">Saldo inicial (Deuda)</th>
+                            <th scope="col">Capital (Cuota a Devolver)</th>
+                            <th scope="col">Interés</th>
+                            <th scope="col">Cuota</th>
+                            <th scope="col">Saldo Final (Deuda Total)</th>
+                        </tr>
+                    </tfoot>
+                </table>
+
+            </div>
+            <div class="card-footer text-center font-weight">
+                ---
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container-fluid">
+            <span class="text-muted">v1.0 (Beta)</span>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
+    <script src="./db/database.js"></script>
+    <script src="./js/calc_rappicard.js"></script>
+
+</body>
+</html>
