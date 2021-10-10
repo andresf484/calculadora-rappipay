@@ -250,8 +250,10 @@ function calculadora_rappicard(){
 
 
         // CUOTA
-        let cuota = cuota_a_devolver + prorateo_interes_mes_1;
-        //console.log(cuota);
+        cuota = cuota_a_devolver + prorateo_interes_mes_1;
+        console.log(cuota);
+
+
 
         /* https://bytes.com/topic/javascript/answers/821709-convert-format-date-yyyy-mm-dd-dd-mm-yyyy */
         // Convert format date from "YYYY-mm-dd" to "dd/mm/YYYY"
@@ -272,7 +274,6 @@ function calculadora_rappicard(){
             <th scope="row">1</th>
             <td>`+fecha_cobro_mes_1+`</td>
             <td>`+compra_tabla+`</td>
-            
             <td>`+cuota_a_devolver_tabla+`</td>
             <td>`+prorateo_interes_mes_1_tabla+`</td>
             <td>`+cuota_tabla+`</td>
@@ -282,7 +283,7 @@ function calculadora_rappicard(){
         `;
 
         //contpos_aux = contpos;
-        //deuda_total_aux = deuda_total;
+        deuda_total_aux = deuda_total;
 
         /* TODO --- Fin - primera cuota ----------------- */
 
@@ -311,14 +312,12 @@ function calculadora_rappicard(){
             cuotas = me_puedo_mover;
         }
 
-        deuda_total_aux = deuda_total;
-
         for (let i = 1; i < (cuotas); i++) {
 
             //console.log(db_periodos);
 
             contpos = contpos + 1;
-            //console.log('cuota ',(i+1),' posicion registro ', contpos, 'periodo ', db_periodos[contpos].periodo);
+            console.log('cuota ',(i+1),' posicion registro ', contpos, 'periodo ', db_periodos[contpos].periodo);
 
             //console.log(deuda_total);
 
@@ -400,24 +399,25 @@ function calculadora_rappicard(){
 
         }
 
-        let cuota_promedio = suma_total_cuotas/cuotas;
-        let total_pagado = compra + intereses_pagados;
+        //cuota_promedio = suma_total_cuotas/cuotas;
+        total_pagado = compra + intereses_pagados + prorateo_interes_mes_1;
+        intereses_pagados_totales = intereses_pagados + prorateo_interes_mes_1;
 
-        if(isNaN(cuota_promedio)){
+        /*if(isNaN(cuota_promedio)){
             cuota_promedio = 0;
-        }
+        }*/
 
         /* TODO --- Fin - calculos cuota 2 hacia adelante y preparación llenado de tabla ----------------- */
 
         //let cuota_promedio = new Intl.NumberFormat("de-DE", {style: "currency", currency: "COP", maximumFractionDigits: 2}).format(cuota_promedio);
         let total_pagado_frontend = new Intl.NumberFormat("de-DE", {style: "currency", currency: "COP", maximumFractionDigits: 2}).format(total_pagado);
-        let intereses_pagados_frontend = new Intl.NumberFormat("de-DE", {style: "currency", currency: "COP", maximumFractionDigits: 2}).format(intereses_pagados);
+        let intereses_pagados_totales_frontend = new Intl.NumberFormat("de-DE", {style: "currency", currency: "COP", maximumFractionDigits: 2}).format(intereses_pagados_totales);
 
         //intereses_pagados = total_pagado-compra;
 
         //document.getElementById("cuotaPromedio").innerHTML=cuota_promedio;
         document.getElementById("totalPagado").innerHTML=total_pagado_frontend;
-        document.getElementById("interesesPagados").innerHTML=intereses_pagados_frontend;
+        document.getElementById("interesesPagados").innerHTML=intereses_pagados_totales_frontend;
 
         document.getElementById("tabla_cuotas").innerHTML=llenar_tabla;
 
