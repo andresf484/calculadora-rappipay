@@ -13,7 +13,7 @@ $(document).ready( function() {
 
     cargarRangoFechas();
 
-    document.getElementById("cuotaPromedio").innerHTML = '0.00';
+    //document.getElementById("cuotaPromedio").innerHTML = '0.00';
     document.getElementById("totalPagado").innerHTML = '0.00';
     document.getElementById("interesesPagados").innerHTML = '0.00';
 
@@ -21,7 +21,7 @@ $(document).ready( function() {
     llenar_tabla +=`
     <tr>
         <th scope="row">0</th>
-        <td>0000-00-00</td>
+        <td>00/00/0000</td>
         <td>0.00</td>
         <td>0.00</td>
         <td>0.00</td>
@@ -99,39 +99,69 @@ function validarFecha(){
 
 }
 
-// TODO - PRINCIPAL function calculadora_rappicard
-function calculadora_rappicard(){
-
+function validarCompra(){
     let compra = parseFloat( document.getElementById("txtCompra").value );
+    // Validación imput txtTasaIntCte para no permitir valores menores a 1
+    if(!isNaN(compra) && compra < 1){
+        document.getElementById("txtCompra").value = 1;
+        return compra = 1.00;
+    }else{
+        document.getElementById("txtCompra").value = compra;
+        return compra;
+    }
+}
+
+function validarTasaIntCte(){
     let interes_mensual = parseFloat( document.getElementById("txtTasaIntCte").value );
+    // Validación imput txtTasaIntCte para no permitir valores menores a 1
+    if (!isNaN(interes_mensual) && interes_mensual < 1) {
+        document.getElementById("txtTasaIntCte").value = '1.00';
+        return interes_mensual = '1.00';
+    }else if(!isNaN(interes_mensual)){
+        document.getElementById("txtTasaIntCte").value = interes_mensual;
+        return interes_mensual;
+    }
+}
+
+function validarCuotas(){
     let cuotas = parseInt( document.getElementById("txtCuotas").value );
 
-    //var fecha = document.getElementById("txtFecha").value;
-    let fecha = validarFecha();
-    //console.log('fecha_calc_rappi ',fecha);
+    // Validación imput txtCuotas para no permitir valores menores a 1
+    if(cuotas < 1){
+        document.getElementById("txtCuotas").value = 1;
+        return cuotas = 1;
+    //Si el número de cuotas ingresada por el usuario está dentro del rango permitido, se retorna el valor de las cuotas tal cual
+    }else if(cuotas >= 1 && cuotas <= 36 ){
+        document.getElementById("txtCuotas").value = cuotas;
+        return cuotas;
+    // Si el número de cuotas ingresada por el usuario es mayor a la cuota máxima permitida, se retorna la máxima cuota permitida
+    }
+    else if(!isNaN(cuotas) && cuotas){
+        document.getElementById("txtCuotas").value = 36;
+        return cuotas = 36;
+    //Si ocurre algún error inesperado
+    }
+}
 
-    let resultado = 0.0;
+
+
+
+
+
+
+// TODO - PRINCIPAL function calculadora_rappicard
+function calculadora_rappicard(){
+    let fecha = validarFecha();
+
+    compra = validarCompra();
+    let interes_mensual = validarTasaIntCte();
+    let cuotas = validarCuotas();
 
     if( !isNaN(compra) && !isNaN(interes_mensual) && !isNaN(cuotas) ){
 
         let llenar_tabla = "";
-
-        //var intereses = 0;
-
-        //var cuota_promedio = 0.0;
-        //var total_pagado = 0.0;
         let intereses_pagados = 0.0;
-        
-        //var deuda_total = 0.0;
-        //var deuda_total_aux = 0.0;
-
         let suma_total_cuotas = 0.0;
-
-        // Validación imput txtCuotas para no permitir valores menores a 1
-        if (cuotas < 1) {
-            document.getElementById("txtCuotas").value = 1;
-            cuotas = 1;
-        }
 
         /* TODO --- Inicio - primera cuota --------------- */
 
@@ -151,8 +181,7 @@ function calculadora_rappicard(){
         }
 
         //intereses = 643.33;
-        intereses = (compra*interes_mensual)/100;
-
+        let intereses = compra*(interes_mensual/100);
 
         let contpos = 0;
         for (let el of db_periodos) {
@@ -209,12 +238,25 @@ function calculadora_rappicard(){
 
         // 321.66 * 2 = 643.33  (2 dias antes del corte de la tarjeta)
         //dias_antes_del_corte = 2;
-        dias_antes_del_corte = diff; //diferencia de dias antes del corte
-        prorateo_interes_mes_1 = interes_diario_mes_1 * dias_antes_del_corte;
+        let dias_antes_del_corte = diff; //diferencia de dias antes del corte
+
+        // TODO - cuotas 1 | interes 0.00
+        // Si el crédito es a una cuota, no genera intereses
+        if(cuotas === 1){
+            prorateo_interes_mes_1 = 0.00;
+        }else{
+            prorateo_interes_mes_1 = interes_diario_mes_1 * dias_antes_del_corte;
+        }
+
 
         // CUOTA
-        cuota = cuota_a_devolver + prorateo_interes_mes_1;
+        let cuota = cuota_a_devolver + prorateo_interes_mes_1;
         //console.log(cuota);
+
+        /* https://bytes.com/topic/javascript/answers/821709-convert-format-date-yyyy-mm-dd-dd-mm-yyyy */
+        // Convert format date from "YYYY-mm-dd" to "dd/mm/YYYY"
+        let p = fecha_cobro_mes_1.split(/\D/g);
+        fecha_cobro_mes_1 = [ p[2], p[1], p[0] ].join("/");
 
         llenar_tabla +=`
 
@@ -226,7 +268,7 @@ function calculadora_rappicard(){
             <td>`+cuota_a_devolver.toFixed(2)+`</td>
             <td>`+prorateo_interes_mes_1.toFixed(2)+`</td>
             <td>`+cuota.toFixed(2)+`</td>
-            <td>`+ deuda_total_fix +`</td>
+            <td>`+deuda_total_fix+`</td>
         </tr>
 
         `;
@@ -271,9 +313,9 @@ function calculadora_rappicard(){
 
             //console.log(deuda_total);
 
-            cuota_a_devolver = (compra/cuotas);
+            let cuota_a_devolver = (compra/cuotas);
 
-            interes_neto = (deuda_total*interes_mensual)/100;
+            let interes_neto = deuda_total*(interes_mensual/100);
 
             let month = new Date(db_periodos[contpos].periodo).getMonth() + 1;
             //let month = db_periodos[contpos].periodo.slice(5, 7);
@@ -287,21 +329,20 @@ function calculadora_rappicard(){
             //console.log(db_periodos[contpos_aux].periodo, ' ', days_in_month);
 
             //interes_diario = interes_neto / days_in_month; // dias del mes
-            interes_diario = interes_neto / days_in_month; // dias del mes
+            let interes_diario = interes_neto / days_in_month; // dias del mes
             //console.log(interes_diario);
 
             //intereses
-            intereses = interes_diario * db_periodos[contpos].dias_calendario_periodo_fecha_cobro; // dias de diferencia con el mes anterior - diff
-            
+            let intereses = interes_diario * db_periodos[contpos].dias_calendario_periodo_fecha_cobro; // dias de diferencia con el mes anterior - diff
+
             //cuota = (compra/cuotas)+intereses;
-            cuota = cuota_a_devolver + intereses;
+            let cuota = cuota_a_devolver + intereses;
             
             //deuda_total = deuda_total_aux-(cuota_a_devolver-intereses);
             // SALDO FINAL
             //deuda_total = 416666.67;
             //deuda_total_fix = 416666.67;
             deuda_total = deuda_total - cuota_a_devolver;
-
             //console.log(cuota_a_devolver);
 
             if(deuda_total < 0){
@@ -310,14 +351,19 @@ function calculadora_rappicard(){
                 deuda_total_fix = deuda_total.toFixed(2);
             }
 
+            /* https://bytes.com/topic/javascript/answers/821709-convert-format-date-yyyy-mm-dd-dd-mm-yyyy */
+            // Convert format date from "YYYY-mm-dd" to "dd/mm/YYYY"
+            let p = db_periodos[contpos].periodo.split(/\D/g);
+            let fecha_cobro_mes = [ p[2], p[1], p[0] ].join("/");
+
             llenar_tabla +=`
 
             <tr>
                 <th scope="row">`+(i+1)+`</th>
-                <td>`+db_periodos[contpos].periodo+`</td>
+                <td>`+fecha_cobro_mes+`</td>
                 <td>`+deuda_total.toFixed(2)+`</td>
                 <td>`+cuota_a_devolver.toFixed(2)+`</td>
-                <td>`+intereses.toFixed(2).toLocaleString( 'es-CO' )+`</td>
+                <td>`+intereses.toFixed(2)+`</td>
                 <td>`+cuota.toFixed(2)+`</td>
                 <td>`+deuda_total_fix+`</td>
             </tr>
@@ -331,8 +377,8 @@ function calculadora_rappicard(){
 
         }
 
-        cuota_promedio = suma_total_cuotas/cuotas;
-        total_pagado = compra + intereses_pagados;
+        let cuota_promedio = suma_total_cuotas/cuotas;
+        let total_pagado = compra + intereses_pagados;
 
         if(isNaN(cuota_promedio)){
             cuota_promedio = 0;
@@ -342,14 +388,14 @@ function calculadora_rappicard(){
 
         //intereses_pagados = total_pagado-compra;
 
-        document.getElementById("cuotaPromedio").innerHTML=cuota_promedio.toFixed(2);
+        //document.getElementById("cuotaPromedio").innerHTML=cuota_promedio.toFixed(2);
         document.getElementById("totalPagado").innerHTML=total_pagado.toFixed(2);
         document.getElementById("interesesPagados").innerHTML=intereses_pagados.toFixed(2);
 
         document.getElementById("tabla_cuotas").innerHTML=llenar_tabla;
 
     }else{
-        document.getElementById("cuotaPromedio").innerHTML="0.0";
+        //document.getElementById("cuotaPromedio").innerHTML="0.0";
         document.getElementById("totalPagado").innerHTML="0.0";
         document.getElementById("interesesPagados").innerHTML="0.0";
     }

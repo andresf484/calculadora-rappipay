@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     <link href="./css/styles.css" rel="stylesheet">
     <title>Rappicard - Calculadora</title>
 </head>
@@ -30,12 +31,10 @@
             </div>
         </nav>
     </header>
-
     <main role="main" class="container-fluid">
         <div class="card">
             <div class="card-header text-center bg-primary text-white font-weight">Rappicard - Simulador de cuotas tarjeta de crédito</div>
             <div class="card-body">
-
                 <div class="row">
                     <div class="col-md-12">
                         <p class="lead">
@@ -47,54 +46,61 @@
                         <br>
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="col-md-4">
-                        <label for="txtCompra">Fecha Rediferido-Compra:</label>
-                        <input onchange="calculadora_rappicard();" type="date" class="form-control" id="txtFecha" required>
+                        <label for="txtFecha">Fecha Rediferido-Compra:</label>
+                        <input onchange="calculadora_rappicard();" type="date" class="form-control" aria-describedby="fechaHelp" id="txtFecha" required>
+                        <small id="fechaHelp" class="form-text text-muted">
+                            <i class="bi bi-info-circle-fill"> Fechas desde 01/09/2021 hasta 28/07/2022.</i>
+                        </small>
                     </div>
-                    <div class="col-md-4">
-
-                    </div>
-                    <div class="col-md-4">
-
+                    <div class="col-md-8">
+                    <!-- <div class="alert alert-warning" role="alert">
+                            <i class="bi bi-exclamation-triangle"></i>
+                            Fecha de pago límite: Día 9 de cada mes después de la fecha de corte.
+                        </div> -->
                     </div>
                 </div>
-
+                <br>
                 <div class="row">
                     <div class="col-md-4">
                         <label for="txtCompra">Valor compra:</label>
-                        <input onchange="calculadora_rappicard();" type="number" step="any" class="form-control" placeholder="0.00" id="txtCompra">
+                        <input onchange="calculadora_rappicard();" type="number" step="any" class="form-control" aria-describedby="compraHelp" id="txtCompra">
+                        <small id="compraHelp" class="form-text text-muted">
+                            <i class="bi bi-info-circle-fill"> Unicamente valores positivos con o sin decimales.</i>
+                        </small>
                     </div>
                     <div class="col-md-4">
                         <label for="txtTasaIntCte">Tasa Int Cte*:</label>
-                        <input onchange="calculadora_rappicard();" type="number" step="0.01" class="form-control" placeholder="0.00" id="txtTasaIntCte">
+                        <input onchange="calculadora_rappicard();" type="number" step="0.01" class="form-control" aria-describedby="tasaIntCteHelp" id="txtTasaIntCte">
+                        <small id="tasaIntCteHelp" class="form-text text-muted">
+                            <i class="bi bi-info-circle-fill"> Valores desde 1.00 en adelante.</i>
+                        </small>
                     </div>
                     <div class="col-md-4">
                         <label for="txtCuotas">Cuotas (Plazo):</label>
-                        <input onchange="calculadora_rappicard();" type="number" class="form-control" placeholder="0" id="txtCuotas">
+                        <input onchange="calculadora_rappicard();" type="number" class="form-control" aria-describedby="cuotasHelp" id="txtCuotas">
+                        <small id="cuotasHelp" class="form-text text-muted">
+                            <i class="bi bi-info-circle-fill"> De 1 a 36 cuotas máximo.</i>
+                        </small>
                     </div>
                 </div>
-
                 <br>
-
                 <div class="row">
-                    <div class="col-md-4">
+                <!-- <div class="col-md-4">
                         <label for="cuotaPpromedio">Cuota promedio:</label>
                         <p id="cuotaPromedio"></p>
-                    </div>
-
-                    <div class="col-md-4">
+                    </div> -->
+                    <div class="col-md-6">
                         <label for="totalPagado">Total a pagar:</label>
                         <p id="totalPagado"></p>
                     </div>
-
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <label for="interesesPagados">Intereses a pagar:</label>
                         <p id="interesesPagados"></p>
                     </div>
                 </div>
-
+                <br>
                 <table class="table table-striped table-hover table-responsive-md">
                     <thead>
                         <tr>
@@ -108,7 +114,6 @@
                         </tr>
                     </thead>
                     <tbody id="tabla_cuotas">
-
                     </tbody>
                     <tfoot>
                         <tr>
@@ -122,25 +127,21 @@
                         </tr>
                     </tfoot>
                 </table>
-
             </div>
             <div class="card-footer text-center font-weight">
                 ---
             </div>
         </div>
     </main>
-
     <footer class="footer">
         <div class="container-fluid">
-            <span class="text-muted">v1.0 (Beta)</span>
+            <span class="text-muted">v1.1.0 (Beta)</span>
         </div>
     </footer>
-
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
     <script src="./db/database.js"></script>
-    <script src="./js/calc_rappicard.js"></script>
-
+    <script src="./js/calc-rappicard-co.js"></script>
 </body>
 </html>

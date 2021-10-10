@@ -1,4 +1,4 @@
-db_periodos = [
+const db_periodos = [
     {
         "periodo": "2021-09-29",
         "dias_calendario_periodo_fecha_cobro": "30"
