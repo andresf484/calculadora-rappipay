@@ -311,6 +311,7 @@ function calculadora_rappicard(){
             cuotas = me_puedo_mover;
         }
 
+        deuda_total_aux = deuda_total;
 
         for (let i = 1; i < (cuotas); i++) {
 
@@ -323,7 +324,7 @@ function calculadora_rappicard(){
 
             let cuota_a_devolver = (compra/cuotas);
 
-            let interes_neto = deuda_total*(interes_mensual/100);
+            let interes_neto = deuda_total_aux*(interes_mensual/100);
 
             let month = new Date(db_periodos[contpos].periodo).getMonth() + 1;
             //let month = db_periodos[contpos].periodo.slice(5, 7);
@@ -346,12 +347,21 @@ function calculadora_rappicard(){
             //cuota = (compra/cuotas)+intereses;
             let cuota = cuota_a_devolver + intereses;
             
+            //deuda_total = deuda_total_aux-(cuota_a_devolver-intereses);
+            // SALDO FINAL
+            //deuda_total = 416666.67;
+            //deuda_total_fix = 416666.67;
+            let deuda_total = deuda_total_aux - cuota_a_devolver;
+            //console.log('deuda total ',deuda_total);
+            //deuda_total_aux = deuda_total;
+
             // TODO Deuda_total periodo anterior
             if(deuda_total < 0){
                 deuda_total_fix = 0.00;
             }else{
                 deuda_total_fix = deuda_total;
             }
+            //console.log('deuda total fix ',deuda_total_fix);
 
             /* https://bytes.com/topic/javascript/answers/821709-convert-format-date-yyyy-mm-dd-dd-mm-yyyy */
             // Convert format date from "YYYY-mm-dd" to "dd/mm/YYYY"
@@ -363,7 +373,7 @@ function calculadora_rappicard(){
             /* https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat */
             // Formato con separador de miles y decimales
             
-            let deuda_total_tabla = new Intl.NumberFormat("de-DE", {maximumFractionDigits: 2}).format(deuda_total);
+            let deuda_total_aux_tabla = new Intl.NumberFormat("de-DE", {maximumFractionDigits: 2}).format(deuda_total_aux);
             let cuota_a_devolver_tabla = new Intl.NumberFormat("de-DE", {maximumFractionDigits: 2}).format(cuota_a_devolver);
             let intereses_tabla = new Intl.NumberFormat("de-DE", {maximumFractionDigits: 2}).format(intereses);
             let cuota_tabla = new Intl.NumberFormat("de-DE", {maximumFractionDigits: 2}).format(cuota);
@@ -374,7 +384,7 @@ function calculadora_rappicard(){
             <tr>
                 <th scope="row">`+(i+1)+`</th>
                 <td>`+fecha_cobro_mes+`</td>
-                <td>`+deuda_total_tabla+`</td>
+                <td>`+deuda_total_aux_tabla+`</td>
                 <td>`+cuota_a_devolver_tabla+`</td>
                 <td>`+intereses_tabla+`</td>
                 <td>`+cuota_tabla+`</td>
@@ -383,13 +393,7 @@ function calculadora_rappicard(){
 
             `;
 
-            //deuda_total = deuda_total_aux-(cuota_a_devolver-intereses);
-            // SALDO FINAL
-            //deuda_total = 416666.67;
-            //deuda_total_fix = 416666.67;
-            deuda_total = deuda_total - cuota_a_devolver;
-            //console.log(deuda_total);
-            //deuda_total_aux = deuda_total;
+            deuda_total_aux = deuda_total;
 
             intereses_pagados = intereses_pagados + intereses;
             suma_total_cuotas = suma_total_cuotas + cuota;
