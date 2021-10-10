@@ -251,8 +251,7 @@ function calculadora_rappicard(){
 
         // CUOTA
         cuota = cuota_a_devolver + prorateo_interes_mes_1;
-        console.log(cuota);
-
+        //console.log(cuota);
 
 
         /* https://bytes.com/topic/javascript/answers/821709-convert-format-date-yyyy-mm-dd-dd-mm-yyyy */
@@ -317,7 +316,7 @@ function calculadora_rappicard(){
             //console.log(db_periodos);
 
             contpos = contpos + 1;
-            console.log('cuota ',(i+1),' posicion registro ', contpos, 'periodo ', db_periodos[contpos].periodo);
+            //console.log('cuota ',(i+1),' posicion registro ', contpos, 'periodo ', db_periodos[contpos].periodo);
 
             //console.log(deuda_total);
 
