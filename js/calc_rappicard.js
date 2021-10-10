@@ -1,6 +1,14 @@
 // TODO - $(document).ready function
 $(document).ready( function() {
-    let fecha_hoy = new Date().toISOString().slice(0, 10);
+    /* https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleDateString */
+    // El inglés británico hace uso del orden día-mes-año
+    date= new Date().toLocaleDateString("en-GB", {timeZone: "America/Bogota"});
+    //console.log('Time mm/dd/yyyy:', date);
+
+    /* https://stackoverflow.com/questions/35856104/convert-mm-dd-yyyy-to-yyyy-mm-dd */
+    fecha_hoy = date.split("/").reverse().join("-");
+    //console.log('Time yyyy-mm-dd:', fecha_hoy);
+
     document.getElementById("txtFecha").value = fecha_hoy;
 
     cargarRangoFechas();
