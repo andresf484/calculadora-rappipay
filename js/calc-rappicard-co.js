@@ -177,7 +177,7 @@ function calculadora_rappicard(){
         if(deuda_total < 0){
             deuda_total_fix = 0.00;
         }else{
-            deuda_total_fix = deuda_total.toFixed(2);
+            deuda_total_fix = deuda_total;
         }
 
         //intereses = 643.33;
@@ -258,17 +258,25 @@ function calculadora_rappicard(){
         let p = fecha_cobro_mes_1.split(/\D/g);
         fecha_cobro_mes_1 = [ p[2], p[1], p[0] ].join("/");
 
+        /* https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat */
+        // Formato con separador de miles y decimales
+        let compra_tabla = new Intl.NumberFormat("de-DE", {maximumFractionDigits: 2}).format(compra);
+        let cuota_a_devolver_tabla = new Intl.NumberFormat("de-DE", {maximumFractionDigits: 2}).format(cuota_a_devolver);
+        let prorateo_interes_mes_1_tabla = new Intl.NumberFormat("de-DE", {maximumFractionDigits: 2}).format(prorateo_interes_mes_1);
+        let cuota_tabla = new Intl.NumberFormat("de-DE", {maximumFractionDigits: 2}).format(cuota);
+        let deuda_total_fix_tabla = new Intl.NumberFormat("de-DE", {maximumFractionDigits: 2}).format(deuda_total_fix);
+
         llenar_tabla +=`
 
         <tr>
             <th scope="row">1</th>
             <td>`+fecha_cobro_mes_1+`</td>
-            <td>`+compra.toFixed(2)+`</td>
+            <td>`+compra_tabla+`</td>
             
-            <td>`+cuota_a_devolver.toFixed(2)+`</td>
-            <td>`+prorateo_interes_mes_1.toFixed(2)+`</td>
-            <td>`+cuota.toFixed(2)+`</td>
-            <td>`+deuda_total_fix+`</td>
+            <td>`+cuota_a_devolver_tabla+`</td>
+            <td>`+prorateo_interes_mes_1_tabla+`</td>
+            <td>`+cuota_tabla+`</td>
+            <td>`+deuda_total_fix_tabla+`</td>
         </tr>
 
         `;
@@ -338,17 +346,11 @@ function calculadora_rappicard(){
             //cuota = (compra/cuotas)+intereses;
             let cuota = cuota_a_devolver + intereses;
             
-            //deuda_total = deuda_total_aux-(cuota_a_devolver-intereses);
-            // SALDO FINAL
-            //deuda_total = 416666.67;
-            //deuda_total_fix = 416666.67;
-            deuda_total = deuda_total - cuota_a_devolver;
-            //console.log(cuota_a_devolver);
-
+            // TODO Deuda_total periodo anterior
             if(deuda_total < 0){
                 deuda_total_fix = 0.00;
             }else{
-                deuda_total_fix = deuda_total.toFixed(2);
+                deuda_total_fix = deuda_total;
             }
 
             /* https://bytes.com/topic/javascript/answers/821709-convert-format-date-yyyy-mm-dd-dd-mm-yyyy */
@@ -356,20 +358,37 @@ function calculadora_rappicard(){
             let p = db_periodos[contpos].periodo.split(/\D/g);
             let fecha_cobro_mes = [ p[2], p[1], p[0] ].join("/");
 
+            //let deuda_total_tabla = new Intl.NumberFormat("de-DE", {style: "currency", currency: "COP", maximumFractionDigits: 2}).format(deuda_total);
+            
+            /* https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat */
+            // Formato con separador de miles y decimales
+            
+            let deuda_total_tabla = new Intl.NumberFormat("de-DE", {maximumFractionDigits: 2}).format(deuda_total);
+            let cuota_a_devolver_tabla = new Intl.NumberFormat("de-DE", {maximumFractionDigits: 2}).format(cuota_a_devolver);
+            let intereses_tabla = new Intl.NumberFormat("de-DE", {maximumFractionDigits: 2}).format(intereses);
+            let cuota_tabla = new Intl.NumberFormat("de-DE", {maximumFractionDigits: 2}).format(cuota);
+            let deuda_total_fix_tabla = new Intl.NumberFormat("de-DE", {maximumFractionDigits: 2}).format(deuda_total_fix);
+
             llenar_tabla +=`
 
             <tr>
                 <th scope="row">`+(i+1)+`</th>
                 <td>`+fecha_cobro_mes+`</td>
-                <td>`+deuda_total.toFixed(2)+`</td>
-                <td>`+cuota_a_devolver.toFixed(2)+`</td>
-                <td>`+intereses.toFixed(2)+`</td>
-                <td>`+cuota.toFixed(2)+`</td>
-                <td>`+deuda_total_fix+`</td>
+                <td>`+deuda_total_tabla+`</td>
+                <td>`+cuota_a_devolver_tabla+`</td>
+                <td>`+intereses_tabla+`</td>
+                <td>`+cuota_tabla+`</td>
+                <td>`+deuda_total_fix_tabla+`</td>
             </tr>
 
             `;
 
+            //deuda_total = deuda_total_aux-(cuota_a_devolver-intereses);
+            // SALDO FINAL
+            //deuda_total = 416666.67;
+            //deuda_total_fix = 416666.67;
+            deuda_total = deuda_total - cuota_a_devolver;
+            //console.log(deuda_total);
             //deuda_total_aux = deuda_total;
 
             intereses_pagados = intereses_pagados + intereses;
@@ -386,11 +405,15 @@ function calculadora_rappicard(){
 
         /* TODO --- Fin - calculos cuota 2 hacia adelante y preparación llenado de tabla ----------------- */
 
+        //let cuota_promedio = new Intl.NumberFormat("de-DE", {style: "currency", currency: "COP", maximumFractionDigits: 2}).format(cuota_promedio);
+        let total_pagado_frontend = new Intl.NumberFormat("de-DE", {style: "currency", currency: "COP", maximumFractionDigits: 2}).format(total_pagado);
+        let intereses_pagados_frontend = new Intl.NumberFormat("de-DE", {style: "currency", currency: "COP", maximumFractionDigits: 2}).format(intereses_pagados);
+
         //intereses_pagados = total_pagado-compra;
 
-        //document.getElementById("cuotaPromedio").innerHTML=cuota_promedio.toFixed(2);
-        document.getElementById("totalPagado").innerHTML=total_pagado.toFixed(2);
-        document.getElementById("interesesPagados").innerHTML=intereses_pagados.toFixed(2);
+        //document.getElementById("cuotaPromedio").innerHTML=cuota_promedio;
+        document.getElementById("totalPagado").innerHTML=total_pagado_frontend;
+        document.getElementById("interesesPagados").innerHTML=intereses_pagados_frontend;
 
         document.getElementById("tabla_cuotas").innerHTML=llenar_tabla;
 
