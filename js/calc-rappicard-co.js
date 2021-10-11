@@ -112,7 +112,7 @@ function validarCompra(){
     if(!isNaN(compra) && compra < 1){
         document.getElementById("txtCompra").value = 1;
         return compra = 1.00;
-    }else{
+    }else if(!isNaN(compra)){
         document.getElementById("txtCompra").value = compra;
         return compra;
     }
@@ -130,7 +130,7 @@ function validarTasaIntCte(){
     }
 }
 
-function validarCuotas(){
+function validarCuotas(fecha){
     let cuotas = parseInt( document.getElementById("txtCuotas").value );
 
     // Validación imput txtCuotas para no permitir valores menores a 1
@@ -139,30 +139,94 @@ function validarCuotas(){
         return cuotas = 1;
     //Si el número de cuotas ingresada por el usuario está dentro del rango permitido, se retorna el valor de las cuotas tal cual
     }else if(cuotas >= 1 && cuotas <= 36 ){
-        document.getElementById("txtCuotas").value = cuotas;
-        return cuotas;
+
+        let contpos = 0; // Contador de posiciones disponibles en el array
+        for (let el of db_periodos) {
+            //console.log(el);
+            //var fecha_cobro_mes_1 = el;
+
+            // Se extrae el mes y año de la fecha ingresada por el usuario
+            let mesAnioFecha = fecha.slice(0, 7);
+            //console.log('mes_fecha ',mesAnioFecha);
+
+            let mesAnioPeriodo = el.periodo.slice(0, 7);
+            //console.log('mes_periodo ',mesAnioPeriodo);
+            
+            // // Si la fecha elegida por el usuario es igual a la fecha de cobro actual, se conserva ese ultimo periodo de facturación
+            if ( mesAnioFecha === mesAnioPeriodo ) {
+                    //console.log('true');
+                    break;
+            }
+            //console.log(contpos);
+            contpos = contpos + 1;
+        }
+
+        /*
+        Hay que validar el tamaño del array de database.js, para saber cuantas cuotas máximo
+        puedo elegir, para no salirme de los periodos disponibles en database.js, 
+        según la fecha escogida en el calendario de la interfaz frontend
+        */
+
+        let tamano_array = db_periodos.length;
+        let posiciones_disponibles_array = contpos;
+
+        let me_puedo_mover = tamano_array - posiciones_disponibles_array;
+        //console.log('me puedo mover por el array: ', me_puedo_mover);
+
+        // TODO - validarCuotas > Validación para controlar cuotas disponibles, según limite de tamaño del array en database.js
+        if (cuotas >= me_puedo_mover) {
+            //document.getElementById("txtCuotas").setAttribute("max", me_puedo_mover);
+            document.getElementById("txtCuotas").value = me_puedo_mover;
+            //console.log('validadCuotas > me puedo mover ', me_puedo_mover);
+            return me_puedo_mover;
+        }else{
+            document.getElementById("txtCuotas").value = cuotas;
+            //console.log('validarCuotas > cuotas', cuotas);
+            return cuotas;
+        }
+
     // Si el número de cuotas ingresada por el usuario es mayor a la cuota máxima permitida, se retorna la máxima cuota permitida
-    }
-    else if(!isNaN(cuotas) && cuotas){
-        document.getElementById("txtCuotas").value = 36;
-        return cuotas = 36;
-    //Si ocurre algún error inesperado
+    }else if(!isNaN(cuotas) && cuotas){
+
+        let contpos = 0; // Contador de posiciones disponibles en el array
+        for (let el of db_periodos) {
+            //console.log(el);
+            //var fecha_cobro_mes_1 = el;
+
+            // Se extrae el mes y año de la fecha ingresada por el usuario
+            let mesAnioFecha = fecha.slice(0, 7);
+            //console.log('mes_fecha ',mesAnioFecha);
+
+            let mesAnioPeriodo = el.periodo.slice(0, 7);
+            //console.log('mes_periodo ',mesAnioPeriodo);
+            
+            // // Si la fecha elegida por el usuario es igual a la fecha de cobro actual, se conserva ese ultimo periodo de facturación
+            if ( mesAnioFecha === mesAnioPeriodo ) {
+                    //console.log('true');
+                    break;
+            }
+            //console.log(contpos);
+            contpos = contpos + 1;
+        }
+
+        let tamano_array = db_periodos.length;
+        let posiciones_disponibles_array = contpos;
+
+        let me_puedo_mover = tamano_array - posiciones_disponibles_array;
+        //console.log('me puedo mover por el array: ', me_puedo_mover);
+
+        document.getElementById("txtCuotas").value = me_puedo_mover;
+        return cuotas = me_puedo_mover;
     }
 }
-
-
-
-
-
-
 
 // TODO - PRINCIPAL function calculadora_rappicard
 function calculadora_rappicard(){
     let fecha = validarFecha();
 
-    compra = validarCompra();
+    let compra = validarCompra();
     let interes_mensual = validarTasaIntCte();
-    let cuotas = validarCuotas();
+    let cuotas = validarCuotas(fecha);
 
     if( !isNaN(compra) && !isNaN(interes_mensual) && !isNaN(cuotas) ){
 
@@ -300,25 +364,6 @@ function calculadora_rappicard(){
         //console.log('ultima posicion del array: ', db_periodos.length-1);
         //console.log('ultimo registro array: ', db_periodos[10]);
 
-
-        /*
-        Hay que validar el tamaño del array de database.js, para saber cuantas cuotas máximo
-        puedo elegir, para no salirme de los periodos disponibles en database.js, 
-        según la fecha escogida en el calendario de la interfaz
-        */
-
-        let tamano_array = db_periodos.length;
-        let posiciones_disponibles_array = contpos;
-
-        let me_puedo_mover = tamano_array - posiciones_disponibles_array;
-        //console.log('me puedo mover por el array: ', me_puedo_mover);
-
-        // TODO - Validación para controlar cuotas disponibles, según limite de tamaño del array en database.js
-        if (cuotas >= me_puedo_mover) {
-            document.getElementById("txtCuotas").setAttribute("max", me_puedo_mover);
-            document.getElementById("txtCuotas").value = me_puedo_mover;
-            cuotas = me_puedo_mover;
-        }
 
         for (let i = 1; i < (cuotas); i++) {
 
