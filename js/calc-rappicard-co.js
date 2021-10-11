@@ -13,6 +13,13 @@ $(document).ready( function() {
 
     cargarRangoFechas();
 
+    document.getElementById("txtCompra").setAttribute("min", 1.00);
+
+    document.getElementById("txtTasaIntCte").setAttribute("min", 1.00);
+
+    document.getElementById("txtCuotas").setAttribute("min", 1);
+    document.getElementById("txtCuotas").setAttribute("max", 36);
+
     //document.getElementById("cuotaPromedio").innerHTML = '0.00';
     document.getElementById("totalPagado").innerHTML = '0.00';
     document.getElementById("interesesPagados").innerHTML = '0.00';
@@ -306,7 +313,9 @@ function calculadora_rappicard(){
         let me_puedo_mover = tamano_array - posiciones_disponibles_array;
         //console.log('me puedo mover por el array: ', me_puedo_mover);
 
-        if (cuotas > me_puedo_mover) {
+        // TODO - Validación para controlar cuotas disponibles, según limite de tamaño del array en database.js
+        if (cuotas >= me_puedo_mover) {
+            document.getElementById("txtCuotas").setAttribute("max", me_puedo_mover);
             document.getElementById("txtCuotas").value = me_puedo_mover;
             cuotas = me_puedo_mover;
         }
