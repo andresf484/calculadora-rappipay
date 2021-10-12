@@ -58,7 +58,7 @@ function cargarRangoFechas(){
     let firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
     let primerDiaMes = firstDay.toISOString().slice(0, 10);
 
-    //var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    //let lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
     //let ultimoDiaMes = lastDay.toISOString().slice(0, 10);
 
     /* https://stackoverflow.com/questions/32378590/set-date-input-fields-max-date-to-today */
@@ -87,7 +87,7 @@ function validarFecha(){
     let firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
     let primerDiaMes = firstDay.toISOString().slice(0, 10);
     
-    //var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    //let lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
     //let ultimoDiaMes = lastDay.toISOString().slice(0, 10);
 
     // Si la fecha ingresada por el usuario es menor a la fecha minima permitida, se retorna la primer fecha permitida
@@ -133,26 +133,22 @@ function validarTasaIntCte(){
 function validarCuotas(fecha){
     let cuotas = parseInt( document.getElementById("txtCuotas").value );
 
-    // Validación imput txtCuotas para no permitir valores menores a 1
-    if(cuotas < 1){
-        document.getElementById("txtCuotas").value = 1;
-        return cuotas = 1;
-    //Si el número de cuotas ingresada por el usuario está dentro del rango permitido, se retorna el valor de las cuotas tal cual
-    }else if(cuotas >= 1 && cuotas <= 36 ){
+    //Si el número de cuotas ingresada por el usuario está dentro del rango permitido o es mayor, se valida el tamaño disponible en el array 
+    if(!isNaN(cuotas) && (cuotas >= 1 && cuotas <= 36) || (cuotas > 36)){
 
         let contpos = 0; // Contador de posiciones disponibles en el array
         for (let el of db_periodos) {
             //console.log(el);
-            //var fecha_cobro_mes_1 = el;
 
             // Se extrae el mes y año de la fecha ingresada por el usuario
             let mesAnioFecha = fecha.slice(0, 7);
             //console.log('mes_fecha ',mesAnioFecha);
 
+            // Se extrae el mes y año, de la fecha de cobro desde el array
             let mesAnioPeriodo = el.periodo.slice(0, 7);
             //console.log('mes_periodo ',mesAnioPeriodo);
             
-            // // Si la fecha elegida por el usuario es igual a la fecha de cobro actual, se conserva ese ultimo periodo de facturación
+            // // Si la fecha elegida por el usuario es igual a la fecha de cobro actual del array, se conserva ese ultimo periodo de facturación
             if ( mesAnioFecha === mesAnioPeriodo ) {
                     //console.log('true');
                     break;
@@ -162,7 +158,7 @@ function validarCuotas(fecha){
         }
 
         /*
-        Hay que validar el tamaño del array de database.js, para saber cuantas cuotas máximo
+        Hay que validar el tamaño del array de database.js, para saber cuántas cuotas máximo
         puedo elegir, para no salirme de los periodos disponibles en database.js, 
         según la fecha escogida en el calendario de la interfaz frontend
         */
@@ -173,51 +169,23 @@ function validarCuotas(fecha){
         let me_puedo_mover = tamano_array - posiciones_disponibles_array;
         //console.log('me puedo mover por el array: ', me_puedo_mover);
 
-        // TODO - validarCuotas > Validación para controlar cuotas disponibles, según limite de tamaño del array en database.js
+        // TODO - validarCuotas > Validación para controlar cuotas disponibles, según límite de tamaño del array en database.js
         if (cuotas >= me_puedo_mover) {
-            //document.getElementById("txtCuotas").setAttribute("max", me_puedo_mover);
             document.getElementById("txtCuotas").value = me_puedo_mover;
-            //console.log('validadCuotas > me puedo mover ', me_puedo_mover);
+            //console.log('validadCuotas > me puedo mover por el array: ', me_puedo_mover);
             return me_puedo_mover;
-        }else{
+        }else{ // El número de cuotas ingresada por el usuario es menor a 'me_puedo_mover', se retorna el número de cuotas tal cual
             document.getElementById("txtCuotas").value = cuotas;
-            //console.log('validarCuotas > cuotas', cuotas);
+            //console.log('validarCuotas > cuotas: ', cuotas);
             return cuotas;
         }
 
-    // Si el número de cuotas ingresada por el usuario es mayor a la cuota máxima permitida, se retorna la máxima cuota permitida
-    }else if(!isNaN(cuotas) && cuotas){
-
-        let contpos = 0; // Contador de posiciones disponibles en el array
-        for (let el of db_periodos) {
-            //console.log(el);
-            //var fecha_cobro_mes_1 = el;
-
-            // Se extrae el mes y año de la fecha ingresada por el usuario
-            let mesAnioFecha = fecha.slice(0, 7);
-            //console.log('mes_fecha ',mesAnioFecha);
-
-            let mesAnioPeriodo = el.periodo.slice(0, 7);
-            //console.log('mes_periodo ',mesAnioPeriodo);
-            
-            // // Si la fecha elegida por el usuario es igual a la fecha de cobro actual, se conserva ese ultimo periodo de facturación
-            if ( mesAnioFecha === mesAnioPeriodo ) {
-                    //console.log('true');
-                    break;
-            }
-            //console.log(contpos);
-            contpos = contpos + 1;
-        }
-
-        let tamano_array = db_periodos.length;
-        let posiciones_disponibles_array = contpos;
-
-        let me_puedo_mover = tamano_array - posiciones_disponibles_array;
-        //console.log('me puedo mover por el array: ', me_puedo_mover);
-
-        document.getElementById("txtCuotas").value = me_puedo_mover;
-        return cuotas = me_puedo_mover;
+    }else if ( !isNaN(cuotas) ){ // Si número de cuotas es menor de 1, se retorna el número de cuotas como 1
+        document.getElementById("txtCuotas").value = 1;
+        //console.log('validarCuotas > cuota es menor de 1 ', cuotas);
+        return cuotas = 1;
     }
+
 }
 
 // TODO - PRINCIPAL function calculadora_rappicard
@@ -257,7 +225,6 @@ function calculadora_rappicard(){
         let contpos = 0;
         for (let el of db_periodos) {
             //console.log(el);
-            //var fecha_cobro_mes_1 = el;
 
             // Se extrae el mes y año de la fecha ingresada por el usuario
             let mesAnioFecha = fecha.slice(0, 7);
@@ -275,7 +242,7 @@ function calculadora_rappicard(){
                     contpos = contpos + 1;
 
                     //console.log(db_periodos[contpos].periodo);
-                    var fecha_cobro_mes_1 = db_periodos[contpos].periodo; // Se mueve al siguiente periodo de facturación y se retorna el dato en fecha_cobro_mes_1
+                    fecha_cobro_mes_1 = db_periodos[contpos].periodo; // Se mueve al siguiente periodo de facturación y se retorna el dato en fecha_cobro_mes_1
                     
                     //9650/30 = 321.66
                     interes_diario_mes_1 = intereses / el.dias_calendario_periodo_fecha_cobro;
@@ -284,7 +251,7 @@ function calculadora_rappicard(){
                     break;
                 }else{ // Se conserva la fecha de facturación actual
                     //console.log('false');
-                    var fecha_cobro_mes_1 = el.periodo;
+                    fecha_cobro_mes_1 = el.periodo;
 
                     //9650/30 = 321.66
                     interes_diario_mes_1 = intereses / el.dias_calendario_periodo_fecha_cobro;
