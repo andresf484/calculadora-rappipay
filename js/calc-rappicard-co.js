@@ -455,6 +455,21 @@ function calculadora_rappicard(){
         //document.getElementById("cuotaPromedio").innerHTML="0.00 COP";
         document.getElementById("totalPagado").innerHTML="0.00 COP";
         document.getElementById("interesesPagados").innerHTML="0.00 COP";
+
+        let llenar_tabla = "";
+        llenar_tabla =`
+        <tr>
+            <th scope="row">0</th>
+            <td>00/00/0000</td>
+            <td>0.00</td>
+            <td>0.00</td>
+            <td>0.00</td>
+            <td>0.00</td>
+            <td>0.00</td>
+        </tr>
+        `;
+    
+        document.getElementById("tabla_cuotas").innerHTML=llenar_tabla;
     }
 }
 
