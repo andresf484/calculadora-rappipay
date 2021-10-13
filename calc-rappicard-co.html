@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="./favicon.ico">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     <link href="./css/styles.css" rel="stylesheet">
@@ -51,7 +52,7 @@
                         <label for="txtFecha">Fecha Rediferido-Compra:</label>
                         <input onchange="calculadora_rappicard();" type="date" class="form-control" aria-describedby="fechaHelp" id="txtFecha" required>
                         <small id="fechaHelp" class="form-text text-muted">
-                            <i class="bi bi-info-circle-fill"> Fechas desde 01/09/2021 hasta 28/07/2022.</i>
+                            <i class="bi bi-info-circle-fill"> Fechas desde 01/09/2021 hasta 29/04/2024.</i>
                         </small>
                     </div>
                     <div class="col-md-8">
@@ -65,7 +66,8 @@
                 <div class="row">
                     <div class="col-md-4">
                         <label for="txtCompra">Valor compra:</label>
-                        <input onchange="calculadora_rappicard();" type="number" step="any" class="form-control" aria-describedby="compraHelp" id="txtCompra">
+                        <span id="compraTooltip"></span>
+                        <input onkeyup="mostrarMilesCompra(this.value);" onchange="calculadora_rappicard();" type="number" step="any" class="form-control" aria-describedby="compraHelp" id="txtCompra">
                         <small id="compraHelp" class="form-text text-muted">
                             <i class="bi bi-info-circle-fill"> Valores positivos con o sin decimales.</i>
                         </small>
@@ -138,7 +140,7 @@
     </main>
     <footer class="footer">
         <div class="container-fluid">
-            <span class="text-muted">v1.1.5-1 (Beta)</span>
+            <span class="text-muted">v1.1.6 (Beta)</span>
         </div>
     </footer>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>

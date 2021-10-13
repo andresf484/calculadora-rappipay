@@ -14,6 +14,7 @@ $(document).ready( function() {
     cargarRangoFechas();
 
     document.getElementById("txtCompra").setAttribute("min", 1.00);
+    document.getElementById("compraTooltip").innerHTML = '0.00 COP';
 
     document.getElementById("txtTasaIntCte").setAttribute("min", 1.00);
 
@@ -21,8 +22,8 @@ $(document).ready( function() {
     document.getElementById("txtCuotas").setAttribute("max", 36);
 
     //document.getElementById("cuotaPromedio").innerHTML = '0.00';
-    document.getElementById("totalPagado").innerHTML = '0.00';
-    document.getElementById("interesesPagados").innerHTML = '0.00';
+    document.getElementById("totalPagado").innerHTML = '0.00 COP';
+    document.getElementById("interesesPagados").innerHTML = '0.00 COP';
 
     let llenar_tabla = '';
     llenar_tabla +=`
@@ -104,6 +105,15 @@ function validarFecha(){
         return lastItemArray;
     }
 
+}
+
+function mostrarMilesCompra(value) {
+    let result = new Intl.NumberFormat("de-DE", {style: "currency", currency: "COP", maximumFractionDigits: 2}).format(value);
+    if(!isNaN(value) && value < 1){
+        document.getElementById("compraTooltip").innerHTML = '0.00 COP';
+    }else{
+        document.getElementById("compraTooltip").innerHTML = result;
+    }
 }
 
 function validarCompra(){
@@ -199,8 +209,8 @@ function calculadora_rappicard(){
     if( !isNaN(compra) && !isNaN(interes_mensual) && !isNaN(cuotas) ){
 
         let llenar_tabla = "";
-        let intereses_pagados = 0.0;
-        let suma_total_cuotas = 0.0;
+        let intereses_pagados = 0.00;
+        let suma_total_cuotas = 0.00;
 
         /* TODO --- Inicio - primera cuota --------------- */
 
@@ -442,9 +452,9 @@ function calculadora_rappicard(){
         document.getElementById("tabla_cuotas").innerHTML=llenar_tabla;
 
     }else{
-        //document.getElementById("cuotaPromedio").innerHTML="0.0";
-        document.getElementById("totalPagado").innerHTML="0.0";
-        document.getElementById("interesesPagados").innerHTML="0.0";
+        //document.getElementById("cuotaPromedio").innerHTML="0.00 COP";
+        document.getElementById("totalPagado").innerHTML="0.00 COP";
+        document.getElementById("interesesPagados").innerHTML="0.00 COP";
     }
 }
 
