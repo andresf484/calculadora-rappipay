@@ -1,23 +1,28 @@
 const db_periodos = [
     {
         "periodo": "2021-09-29",
-        "dias_calendario_periodo_fecha_cobro": "30"
+        "dias_calendario_periodo_fecha_cobro": "30",
+        "tasa_interes": "1.93"
     },
     {
         "periodo": "2021-10-28",
-        "dias_calendario_periodo_fecha_cobro": "29"
+        "dias_calendario_periodo_fecha_cobro": "29",
+        "tasa_interes": "1.92"
     },
     {
         "periodo": "2021-11-29",
-        "dias_calendario_periodo_fecha_cobro": "32"
+        "dias_calendario_periodo_fecha_cobro": "32",
+        "tasa_interes": "1.93"
     },
     {
         "periodo": "2021-12-30",
-        "dias_calendario_periodo_fecha_cobro": "31"
+        "dias_calendario_periodo_fecha_cobro": "31",
+        "tasa_interes": "1.95"
     },
     {
         "periodo": "2022-01-28",
-        "dias_calendario_periodo_fecha_cobro": "29"
+        "dias_calendario_periodo_fecha_cobro": "29",
+        "tasa_interes": "1.9776"
     },
     {
         "periodo": "2022-02-25",
@@ -52,7 +57,7 @@ const db_periodos = [
         "dias_calendario_periodo_fecha_cobro": "30"
     },
     {
-        "periodo": "2022-10-30",
+        "periodo": "2022-10-28",
         "dias_calendario_periodo_fecha_cobro": "29"
     },
     {

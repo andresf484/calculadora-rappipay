@@ -1,0 +1,2 @@
+uglifyjs js/calc-rappicard-co.js > js/calc-rappicard-co.min.js
+uglifyjs db/database-co.js > db/database-co.min.js
