@@ -26,11 +26,14 @@ const db_periodos = [
     },
     {
         "periodo": "2022-02-25",
-        "dias_calendario_periodo_fecha_cobro": "28"
+        "dias_calendario_periodo_fecha_cobro": "28",
+        "tasa_interes": "2.0418"
     },
     {
         "periodo": "2022-03-30",
-        "dias_calendario_periodo_fecha_cobro": "33"
+        "dias_calendario_periodo_fecha_cobro": "33",
+        "tasa_interes": "2.0592"
+
     },
     {
         "periodo": "2022-04-28",
